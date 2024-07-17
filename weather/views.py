@@ -40,6 +40,10 @@ def main(request):
             search_history = update_search_history(search_history, city_name)
             request.session['search_history'] = search_history
 
+            city_search, created = City.objects.get_or_create(name=city_name)
+            city_search.number_of_searches += 1
+            city_search.save()
+
     context = {
         'weather_info': weather_info,
         'cities': cities,

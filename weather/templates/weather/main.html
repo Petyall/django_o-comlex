@@ -3,36 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <title>Прогноз погоды</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .search-history li {
+            list-style-type: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Прогноз погоды</h1>
-    <form method="get">
-        <input type="text" name="city" list="cities" placeholder="Введите название города">
-        <datalist id="cities">
-            {% for city in cities %}
-                <option value="{{ city.name }}">{{ city.name }}</option>
-            {% endfor %}
-        </datalist>
-        <button type="submit">Получить погоду</button>
-    </form>
-    {% if weather_info %}
-        <h2>Прогноз погоды в {{ weather_info.city }}:</h2>
-        <p>Температура: {{ weather_info.temperature }}°C</p>
-        <p>Скорость ветра: {{ weather_info.windspeed }} м/с</p>
-        <p>Состояние: {{ weather_info.condition }}</p>
-    {% endif %}
-    {% if error_message %}
-        <p>{{ error_message }}</p>
-    {% endif %}
-
-    {% if search_history %}
-    <h2>История поиска</h2>
-    <ul>
-        {% for city in search_history %}
-            <a href="?city={{ city }}"><li>{{ city }}</li></a>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Прогноз погоды</h1>
+                <form method="get" class="form-inline">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="text" name="city" list="cities" class="form-control" placeholder="Введите название города">
+                        <datalist id="cities">
+                            {% for city in cities %}
+                                <option value="{{ city.name }}">{{ city.name }}</option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Получить погоду</button>
+                </form>
+                {% if weather_info %}
+                    <div class="mt-4">
+                        <h2>Прогноз погоды в {{ weather_info.city }}:</h2>
+                        <p>Температура: {{ weather_info.temperature }}°C</p>
+                        <p>Скорость ветра: {{ weather_info.windspeed }} м/с</p>
+                        <p>Состояние: {{ weather_info.condition }}</p>
+                    </div>
+                {% endif %}
+                {% if error_message %}
+                    <div class="alert alert-danger mt-4" role="alert">
+                        {{ error_message }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if search_history %}
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">История поиска</h2>
+                    <ul class="search-history">
+                        {% for city in search_history %}
+                            <li><a href="?city={{ city }}">{{ city }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Пример работы API для просмотра статистики поиска</h2>
+                <div id="api-data" class="mt-4">
+                    <!-- Здесь будет отображен JSON -->
+                </div>
+                <a href="http://127.0.0.1:8000/api/city_search/">Полная версия</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('http://127.0.0.1:8000/api/city_search/')
+                .then(response => response.json())
+                .then(data => {
+                    const apiDataDiv = document.getElementById('api-data');
+                    const firstTwoItems = data.slice(0, 2);
+                    const formattedJson = JSON.stringify(firstTwoItems, null, 4);
+                    apiDataDiv.innerHTML = `<pre>${formattedJson}</pre>`;
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        });
+    </script>
 </body>
 </html>

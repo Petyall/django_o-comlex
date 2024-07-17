@@ -1,18 +1,18 @@
 from django.shortcuts import render
 
-from weather.utils import get_weather, get_coordinates
+from weather.open_meteo_api import get_weather, get_coordinates
 
 
 def main(request):
-    weather_data = None
+    weather_info = None
     if 'city' in request.GET:
-        city = request.GET['city']
-        latitude, longitude, message = get_coordinates(city)
+        city_name = request.GET['city']
+        latitude, longitude, error_message = get_coordinates(city_name)
+        if error_message:
+            context = {'error_message': error_message}
+            return render(request, 'weather/main.html', context)
         if latitude and longitude:
-            print(latitude, longitude)
-            weather_data = get_weather(latitude, longitude)
-            weather_data['city'] = city
-        if message:
-            message_data = {'message': message}
-            return render(request, 'weather/main.html', {'weather_data': weather_data, 'message_data': message_data})
-    return render(request, 'weather/main.html', {'weather_data': weather_data})
+            weather_info = get_weather(latitude, longitude)
+            weather_info['city'] = city_name
+    context = {'weather_info': weather_info}
+    return render(request, 'weather/main.html', context)

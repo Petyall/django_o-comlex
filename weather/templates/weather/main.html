@@ -10,14 +10,14 @@
         <input type="text" name="city" placeholder="Введите название города">
         <button type="submit">Получить погоду</button>
     </form>
-    {% if weather_data %}
-        <h2>Прогноз погоды в {{ weather_data.city }}:</h2>
-        <p>Температура: {{ weather_data.temperature }}°C</p>
-        <p>Скорость ветра: {{ weather_data.windspeed }} м/с</p>
-        <p>Condition: {{ weather_data.condition }}</p>
+    {% if weather_info %}
+        <h2>Прогноз погоды в {{ weather_info.city }}:</h2>
+        <p>Температура: {{ weather_info.temperature }}°C</p>
+        <p>Скорость ветра: {{ weather_info.windspeed }} м/с</p>
+        <p>Condition: {{ weather_info.condition }}</p>
     {% endif %}
-    {% if message_data %}
-        <p>{{ message_data.message }}</p>
+    {% if error_message %}
+        <p>{{ error_message }}</p>
     {% endif %}
 </body>
 </html>

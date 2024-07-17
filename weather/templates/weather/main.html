@@ -7,7 +7,12 @@
 <body>
     <h1>Прогноз погоды</h1>
     <form method="get">
-        <input type="text" name="city" placeholder="Введите название города">
+        <input type="text" name="city" list="cities" placeholder="Введите название города">
+        <datalist id="cities">
+            {% for city in cities %}
+                <option value="{{ city.name }}">{{ city.name }}</option>
+            {% endfor %}
+        </datalist>
         <button type="submit">Получить погоду</button>
     </form>
     {% if weather_info %}

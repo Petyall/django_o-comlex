@@ -37,7 +37,7 @@
                 </form>
                 {% if weather_info %}
                     <div class="mt-4">
-                        <h2>Прогноз погоды в {{ weather_info.city }}:</h2>
+                        <h2>Прогноз погоды в городе {{ weather_info.city }}:</h2>
                         <p>Температура: {{ weather_info.temperature }}°C</p>
                         <p>Скорость ветра: {{ weather_info.windspeed }} м/с</p>
                         <p>Состояние: {{ weather_info.condition }}</p>

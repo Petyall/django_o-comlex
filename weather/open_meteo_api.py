@@ -51,15 +51,20 @@ def get_coordinates(city_name: str) -> Tuple[Optional[float], Optional[float], O
     """
     Запрашивает координаты города по его названию с помощью Open Meteo API
     """
+
+    # Выполнение запроса
     url = f"https://geocoding-api.open-meteo.com/v1/search?name={city_name}"
     response = requests.get(url)
 
+    # Обработка полученного ответа
     if response.status_code == 200 and response.json():
         try:
             response_data = response.json()["results"][0]
+        # Возврат ошибки если город не найден
         except KeyError:
             return None, None, f"Город {city_name} не найден"
 
+        # Возврат полученных координат
         return (
             float(response_data["latitude"]),
             float(response_data["longitude"]),

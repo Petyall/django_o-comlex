@@ -1,7 +1,8 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from weather.views import main
+
 from weather.api_views import CitySearchViewSet
+from weather.views import main
 
 app_name = 'weather'
 
